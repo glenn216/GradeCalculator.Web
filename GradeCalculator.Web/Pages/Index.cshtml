@@ -1,0 +1,80 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<section class="section-content-inside">
+    <div class="container position-relative" data-sticky-container>
+
+
+        <div class="row">
+            <div class="form-group col-md-6 mb-2 justify-content-center">
+
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="inputName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="inputName" name="inputName" aria-describedby="inputNameHelp">
+                        <div id="inputNameHelp" class="form-text">We'll never share your personal information with anyone else.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputYearLevel" class="form-label">Level/Year</label>
+                        <select class="form-select" id="inputYearLevel" name="inputYearLevel" aria-label="Choose a year/level">
+                            @{
+                                foreach (var levelItem in Model.studentLevelModel.GetLevel())
+                                {
+                                    if (levelItem.LevelID == 1)
+                                    {
+                                        <option value="@levelItem.LevelID" selected>@levelItem.LevelName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@levelItem.LevelID">@levelItem.LevelName</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputProgram" class="form-label">Program</label>
+                        <select class="form-select" id="inputProgram" name="inputProgram" aria-label="Choose a program">
+                            @{
+                                foreach (var programItem in Model.programModel.GetProgram())
+                                {
+                                    if (programItem.ProgramID == 1)
+                                    {
+                                        <option value="@programItem.ProgramID" selected>@programItem.ProgramName (@programItem.ProgramAbbrev)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@programItem.ProgramID">@programItem.ProgramName (@programItem.ProgramAbbrev)</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputTerm" class="form-label">Term</label>
+                        <select class="form-select" id="inputTerm" name="inputTerm" aria-label="Choose a term">
+                            @{
+                                foreach (var termItem in Model.termModel.GetTerm())
+                                {
+                                    if (termItem.TermID == 1)
+                                    {
+                                        <option value="@termItem.TermID" selected>@termItem.TermName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@termItem.TermID">@termItem.TermName</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</section>

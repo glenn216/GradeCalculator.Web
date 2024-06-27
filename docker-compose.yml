@@ -1,0 +1,6 @@
+﻿services:
+  gradecalculator.web:
+    image: gradecalculator.web
+    build:
+      context: .
+      dockerfile: GradeCalculator.Web/Dockerfile
