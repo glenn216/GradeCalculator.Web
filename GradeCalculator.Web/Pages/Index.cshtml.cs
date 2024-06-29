@@ -1,4 +1,5 @@
 using System.Data;
+using System.Text.Json;
 using GradeCalculator.Web.database;
 using GradeCalculator.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -33,9 +34,16 @@ public class IndexModel : PageModel
         StudentInformationModel studentInformationModel = new StudentInformationModel()
         {
             Name = Convert.ToString(Request.Form["inputName"]),
-            Level = GetLevelName(Convert.ToInt32(Request.Form["inputYearLevel"])) 
+            LevelID = Convert.ToInt32(Request.Form["inputYearLevel"]),
+            LevelName = GetLevelName(Convert.ToInt32(Request.Form["inputYearLevel"])),
+            ProgramID = Convert.ToInt32(Request.Form["inputProgram"]),
+            ProgramName = $"{GetProgramName(Convert.ToInt32(Request.Form["inputProgram"]))} ({GetProgramAbbrev(Convert.ToInt32(Request.Form["inputProgram"]))})",
+            TermID = Convert.ToInt32(Request.Form["inputTerm"]),
+            TermName = GetTermName(Convert.ToInt32(Request.Form["inputTerm"]))
         };
-        return RedirectToPage("GradeCalculatorForm", studentInformationModel);
+        string json = JsonSerializer.Serialize(studentInformationModel);
+        //return RedirectToPage("GradeCalculatorForm", studentInformationModel);
+        return RedirectToPage("GradeCalculatorForm", new { json });
     }
     private void InitializeProgram()
     {
@@ -137,6 +145,75 @@ public class IndexModel : PageModel
                 }
 
                 return YearLevelName;
+            }
+        }
+    }
+    private String GetProgramName(Int32 programID)
+    {
+        using (var connection = new SqliteConnection(Database.ConnectionString))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+                @"SELECT ProgramName FROM tblProgram WHERE ProgramID = @ProgramID";
+            command.Parameters.AddWithValue("@ProgramID", programID);
+
+            using (var reader = command.ExecuteReader())
+            {
+                String ProgramName = null;
+                while (reader.Read())
+                {
+                    ProgramName = reader.GetString("ProgramName");
+                }
+
+                return ProgramName;
+            }
+        }
+    }
+    private String GetProgramAbbrev(Int32 programID)
+    {
+        using (var connection = new SqliteConnection(Database.ConnectionString))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+                @"SELECT ProgramAbbrev FROM tblProgram WHERE ProgramID = @ProgramID";
+            command.Parameters.AddWithValue("@ProgramID", programID);
+
+            using (var reader = command.ExecuteReader())
+            {
+                String ProgramAbbrev = null;
+                while (reader.Read())
+                {
+                    ProgramAbbrev = reader.GetString("ProgramAbbrev");
+                }
+
+                return ProgramAbbrev;
+            }
+        }
+    }
+    private String GetTermName(Int32 termID)
+    {
+        using (var connection = new SqliteConnection(Database.ConnectionString))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+                @"SELECT TermName FROM tblTerm WHERE TermID = @TermID";
+            command.Parameters.AddWithValue("@TermID", termID);
+
+            using (var reader = command.ExecuteReader())
+            {
+                String TermName = null;
+                while (reader.Read())
+                {
+                    TermName = reader.GetString("TermName");
+                }
+
+                return TermName;
             }
         }
     }
