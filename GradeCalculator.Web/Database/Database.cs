@@ -22,21 +22,9 @@
  */
 #endregion
 
-namespace GradeCalculator.Web.Models;
+namespace GradeCalculator.Web.database;
 
-public class StudentLevelModel
+public struct Database
 {
-    public Int32 LevelID { get; set; }
-    public String LevelName { get; set; }
-    
-    private List<StudentLevelModel> Level { get; set; }
-
-    public List<StudentLevelModel> GetLevel()
-    {
-        return this.Level;
-    }
-    public void SetLevel(List<StudentLevelModel> newLevel)
-    {
-        this.Level = newLevel;
-    }
+    public const string ConnectionString = "Data Source=app.db.sqlite";
 }
