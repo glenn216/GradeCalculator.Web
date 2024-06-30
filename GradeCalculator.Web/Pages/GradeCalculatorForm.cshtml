@@ -109,6 +109,7 @@
                     console.log(data);
 
                     var average = GeneralWeightedAverage.reduce((a, b) => a + b, 0) / GeneralWeightedAverage.length;
+                    average = Math.round(average * 100) / 100;
                     const personalInformationElement = document.getElementById('personalInformation');
                     const ul = personalInformationElement.querySelector('ul');
 
