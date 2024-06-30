@@ -24,7 +24,6 @@
 
 using System.Data;
 using System.Text.Json;
-using GradeCalculator.Web.database;
 using GradeCalculator.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -71,7 +70,7 @@ public class IndexModel : PageModel
     }
     private void InitializeProgram()
     {
-        using (var connection = new SqliteConnection(Database.ConnectionString))
+        using (var connection = new SqliteConnection(Database.Database.ConnectionString))
         {
             connection.Open();
 
@@ -99,7 +98,7 @@ public class IndexModel : PageModel
 
     private void InitializeYearLevel()
     {
-        using (var connection = new SqliteConnection(Database.ConnectionString))
+        using (var connection = new SqliteConnection(Database.Database.ConnectionString))
         {
             connection.Open();
 
@@ -125,7 +124,7 @@ public class IndexModel : PageModel
     }
     private void InitializeTerm()
     {
-        using (var connection = new SqliteConnection(Database.ConnectionString))
+        using (var connection = new SqliteConnection(Database.Database.ConnectionString))
         {
             connection.Open();
 
@@ -151,7 +150,7 @@ public class IndexModel : PageModel
     }
     private String GetLevelName(Int32 levelID)
     {
-        using (var connection = new SqliteConnection(Database.ConnectionString))
+        using (var connection = new SqliteConnection(Database.Database.ConnectionString))
         {
             connection.Open();
 
@@ -174,7 +173,7 @@ public class IndexModel : PageModel
     }
     private String GetProgramName(Int32 programID)
     {
-        using (var connection = new SqliteConnection(Database.ConnectionString))
+        using (var connection = new SqliteConnection(Database.Database.ConnectionString))
         {
             connection.Open();
 
@@ -197,7 +196,7 @@ public class IndexModel : PageModel
     }
     private String GetProgramAbbrev(Int32 programID)
     {
-        using (var connection = new SqliteConnection(Database.ConnectionString))
+        using (var connection = new SqliteConnection(Database.Database.ConnectionString))
         {
             connection.Open();
 
@@ -220,7 +219,7 @@ public class IndexModel : PageModel
     }
     private String GetTermName(Int32 termID)
     {
-        using (var connection = new SqliteConnection(Database.ConnectionString))
+        using (var connection = new SqliteConnection(Database.Database.ConnectionString))
         {
             connection.Open();
 

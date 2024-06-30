@@ -22,7 +22,7 @@
  */
 #endregion
 
-namespace GradeCalculator.Web.database;
+namespace GradeCalculator.Web.Database;
 
 public struct Database
 {

@@ -24,7 +24,6 @@
 
 using System.Data;
 using System.Text.Json;
-using GradeCalculator.Web.database;
 using GradeCalculator.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -89,7 +88,7 @@ public class GradeCalculatorForm : PageModel
 
     private void InitializeCourse(Int32 YearLevelID, Int32 ProgramID, Int32 TermID)
     {
-        using (var connection = new SqliteConnection(Database.ConnectionString))
+        using (var connection = new SqliteConnection(Database.Database.ConnectionString))
         {
             connection.Open();
 
