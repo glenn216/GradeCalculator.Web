@@ -2,6 +2,9 @@
 # GradeCalculator.Web
 
 An ASP.NET Core Web application to compute the General Weighted Average of the students in a certain school.
+## Screenshots
+![Screenshot #1](https://i.imgur.com/R8Vd9F3.png)
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
