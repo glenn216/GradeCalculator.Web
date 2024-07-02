@@ -40,7 +40,7 @@ Start the server
 
 To deploy this project run
 ```bash
-  dotnet publish -p:PublishSingleFile=true
+  dotnet publish
 ```
 
 
