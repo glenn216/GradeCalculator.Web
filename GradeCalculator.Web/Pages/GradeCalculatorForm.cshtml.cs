@@ -35,22 +35,21 @@ public class GradeCalculatorForm : PageModel
 {
     public StudentInformationModel studentInformationModel;
     public CourseModel courseModel = new CourseModel();
-    public void OnGet(string json)
+    public void OnGet(String Serialize)
     {
-        this.studentInformationModel = JsonSerializer.Deserialize<StudentInformationModel>(json);
+        this.studentInformationModel = JsonSerializer.Deserialize<StudentInformationModel>(Serialize);
 
         //this.studentInformationModel = newStudentInformationModel;
-        Console.WriteLine("Name: " + studentInformationModel.Name);
-        Console.WriteLine("Year/Level: " + studentInformationModel.LevelName);
-        Console.WriteLine("Program: " + studentInformationModel.ProgramName);
-        Console.WriteLine("Term: " + studentInformationModel.TermName);
+        Console.WriteLine($"Name: {studentInformationModel.StudentName}");
+        Console.WriteLine($"Year/Level: {GetLevelName(studentInformationModel.LevelID)}");
+        Console.WriteLine($"Program: {GetProgramName(studentInformationModel.ProgramID)} ({GetProgramAbbrev(studentInformationModel.ProgramID)})");
+        Console.WriteLine($"Term: {GetTermName(studentInformationModel.TermID)}");
         
         InitializeCourse(studentInformationModel.LevelID, studentInformationModel.ProgramID, studentInformationModel.TermID);
     }
     public async Task<IActionResult> OnPostCalculateFinalGrade()
     {
         var formData = Request.Form;
-        String CourseName = formData["courseName"];
         Double PRELIMS = Convert.ToDouble(formData["inputPrelims"]) * .20;
         Double MIDTERMS = Convert.ToDouble(formData["inputMidterms"]) * .20;
         Double PREFINALS = Convert.ToDouble(formData["inputPrefinals"]) * .20;
@@ -60,7 +59,7 @@ public class GradeCalculatorForm : PageModel
         FINAL_GRADE = Math.Round(FINAL_GRADE, 2);
        
         Console.WriteLine("--- " + formData["studentName"] + " ---");
-        Console.WriteLine("Course: " + CourseName);
+        Console.WriteLine("Course: " + formData["CourseName"]);
         Console.WriteLine("Final Grade: " + FINAL_GRADE);
         return await Task.FromResult<IActionResult>(new JsonResult(new
         {
@@ -111,6 +110,98 @@ public class GradeCalculatorForm : PageModel
                     Course.Add(courseItem);
                 }
                 courseModel.SetCourse(Course);
+            }
+        }
+    }  
+    public String GetLevelName(Int32 levelID)
+    {
+        using (var connection = new SqliteConnection(Database.Database.ConnectionString))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+                @"SELECT YearLevelName FROM tblYearLevel WHERE YearLevelID = @LevelID";
+            command.Parameters.AddWithValue("@LevelID", levelID);
+
+            using (var reader = command.ExecuteReader())
+            {
+                String YearLevelName = null;
+                while (reader.Read())
+                {
+                    YearLevelName = reader.GetString("YearLevelName");
+                }
+
+                return YearLevelName;
+            }
+        }
+    }
+    public String GetProgramName(Int32 programID)
+    {
+        using (var connection = new SqliteConnection(Database.Database.ConnectionString))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+                @"SELECT ProgramName FROM tblProgram WHERE ProgramID = @ProgramID";
+            command.Parameters.AddWithValue("@ProgramID", programID);
+
+            using (var reader = command.ExecuteReader())
+            {
+                String ProgramName = null;
+                while (reader.Read())
+                {
+                    ProgramName = reader.GetString("ProgramName");
+                }
+
+                return ProgramName;
+            }
+        }
+    }
+    public String GetProgramAbbrev(Int32 programID)
+    {
+        using (var connection = new SqliteConnection(Database.Database.ConnectionString))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+                @"SELECT ProgramAbbrev FROM tblProgram WHERE ProgramID = @ProgramID";
+            command.Parameters.AddWithValue("@ProgramID", programID);
+
+            using (var reader = command.ExecuteReader())
+            {
+                String ProgramAbbrev = null;
+                while (reader.Read())
+                {
+                    ProgramAbbrev = reader.GetString("ProgramAbbrev");
+                }
+
+                return ProgramAbbrev;
+            }
+        }
+    }
+    public String GetTermName(Int32 termID)
+    {
+        using (var connection = new SqliteConnection(Database.Database.ConnectionString))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+                @"SELECT TermName FROM tblTerm WHERE TermID = @TermID";
+            command.Parameters.AddWithValue("@TermID", termID);
+
+            using (var reader = command.ExecuteReader())
+            {
+                String TermName = null;
+                while (reader.Read())
+                {
+                    TermName = reader.GetString("TermName");
+                }
+
+                return TermName;
             }
         }
     }

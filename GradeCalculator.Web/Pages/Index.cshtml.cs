@@ -56,17 +56,13 @@ public class IndexModel : PageModel
     {
         StudentInformationModel studentInformationModel = new StudentInformationModel()
         {
-            Name = Convert.ToString(Request.Form["inputName"]),
+            StudentName = Convert.ToString(Request.Form["inputName"]),
             LevelID = Convert.ToInt32(Request.Form["inputYearLevel"]),
-            LevelName = GetLevelName(Convert.ToInt32(Request.Form["inputYearLevel"])),
             ProgramID = Convert.ToInt32(Request.Form["inputProgram"]),
-            ProgramName = $"{GetProgramName(Convert.ToInt32(Request.Form["inputProgram"]))} ({GetProgramAbbrev(Convert.ToInt32(Request.Form["inputProgram"]))})",
-            TermID = Convert.ToInt32(Request.Form["inputTerm"]),
-            TermName = GetTermName(Convert.ToInt32(Request.Form["inputTerm"]))
+            TermID = Convert.ToInt32(Request.Form["inputTerm"])
         };
-        string json = JsonSerializer.Serialize(studentInformationModel);
-        //return RedirectToPage("GradeCalculatorForm", studentInformationModel);
-        return RedirectToPage("GradeCalculatorForm", new { json });
+        
+        return RedirectToPage("GradeCalculatorForm", new { Serialize = JsonSerializer.Serialize(studentInformationModel) });
     }
     private void InitializeProgram()
     {
