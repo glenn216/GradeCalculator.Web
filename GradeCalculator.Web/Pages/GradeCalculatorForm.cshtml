@@ -3,6 +3,7 @@
 
 @{
     #region MIT License
+
     /*
      * Copyright (c) 2024 Glenn Alon
      *
@@ -24,141 +25,156 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
      * SOFTWARE.
      */
+
     #endregion
-    
+
     ViewData["Title"] = "Grade Calculator Form";
 }
-<div class="col-md-12">
-    <div class="form-group border p-3" style="margin-bottom:10px;">
-        <p>
-            <label class="col-sm-3 col-md-12 control-label text-primary border-bottom required">
-                <b>Student Information</b>
-            </label>
-        </p>
-        <div class="mb-1" id="personalInformation">
-            <ul>
-                <li>Name: <text>@Model.studentInformationModel.Name</text></li>
-                <li>Level / Year: <text>@Model.studentInformationModel.LevelName</text></li>
-                <li>Program: <text>@Model.studentInformationModel.ProgramName</text></li>
-                <li>Term: <text>@Model.studentInformationModel.TermName</text></li>
-                <li>General Weighted Average: <text>0.00</text></li>
-            </ul>
+<div id="app">
+    <div class="col-md-12">
+        <div class="form-group border p-3" style="margin-bottom:10px;">
+            <p>
+                <label class="col-sm-3 col-md-12 control-label text-primary border-bottom required">
+                    <b>Student Information</b>
+                </label>
+            </p>
+            <div class="mb-1" id="personalInformation">
+                <ul>
+                    <li>Name: {{ studentName }}</li>
+                    <li>Level / Year: {{ yearLevel }}</li>
+                    <li>Program: {{ program }}</li>
+                    <li>Term: {{ term }}</li>
+                    <li>General Weighted Average: {{ gwa.toFixed(2) }}</li>
+                </ul>
+            </div>
+
         </div>
-        
+    </div>
+    <div class="row">
+        @{
+            foreach (var courseItem in Model.courseModel.GetCourse())
+            {
+                <div class="col-md-6">
+                    <form class="form-horizontal grade-form" id="gradeForm" method="post">
+                        <div class="form-group border p-3" style="margin-bottom:10px;">
+                            <p>
+                                <label class="col-sm-3 col-md-12 control-label text-primary border-bottom required">
+                                    <b>@courseItem.CourseName</b>
+                                </label>
+                            </p>
+                            <div class="mb-1">
+                                <table class="table">
+                                    <thead>
+                                    <tr class="table-active">
+                                        <th scope="col">Prelims</th>
+                                        <th scope="col">Midterms</th>
+                                        <th scope="col">Pre-finals</th>
+                                        <th scope="col">Finals</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="col-md-7">
+                                                <input type="number" step=".01" class="form-control w-100" id="inputPrelims" name="inputPrelims">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="col-md-7">
+                                                <input type="number" step=".01" class="form-control w-100" id="inputMidterms" name="inputMidterms">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="col-md-7">
+                                                <input type="number" step=".01" class="form-control w-100" id="inputPrefinals" name="inputPrefinals">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class=" col-md-7">
+                                                <input type="number" step=".01" class="form-control w-100" id="inputFinals" name="inputFinals">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <input type="hidden" name="studentName" v-bind:value="studentName">
+                            <input type="hidden" name="courseName" value="@courseItem.CourseName">
+                            <label id="result">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            }
+        }
     </div>
 </div>
-<div class="row">
-    @{
-        foreach (var courseItem in Model.courseModel.GetCourse())
-        {
-            var CourseName = courseItem.CourseName;
-            <div class="col-md-6">
-                <form class="form-horizontal grade-form" id="gradeForm" method="post">
-                    <div class="form-group border p-3" style="margin-bottom:10px;">
-                        <p>
-                            <label class="col-sm-3 col-md-12 control-label text-primary border-bottom required">
-                                <b>@CourseName</b>
-                            </label>
-                        </p>
-                        <div class="mb-1">
-                            <table class="table">
-                                <thead>
-                                <tr class="table-active">
-                                    <th scope="col">Prelims</th>
-                                    <th scope="col">Midterms</th>
-                                    <th scope="col">Pre-finals</th>
-                                    <th scope="col">Finals</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="col-md-7">
-                                            <input type="number" step=".01" class="form-control w-100" id="inputPrelims" name="inputPrelims">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col-md-7">
-                                            <input type="number" step=".01" class="form-control w-100" id="inputMidterms" name="inputMidterms">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col-md-7">
-                                            <input type="number" step=".01" class="form-control w-100" id="inputPrefinals" name="inputPrefinals">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class=" col-md-7">
-                                            <input type="number" step=".01" class="form-control w-100" id="inputFinals" name="inputFinals">
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <input type="hidden" name="studentName" value="@Model.studentInformationModel.Name">
-                        <input type="hidden" name="courseName" value="@CourseName">
-                        <label id="result">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </label>
-                    </div>
-                </form>
-            </div>
-        }
-    }
-</div>
-<script>
-    const forms = document.querySelectorAll('.grade-form');
-    var GeneralWeightedAverage = [];
-    forms.forEach(form => {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
 
-            const formData = new FormData(form);
-            const url = '@Url.Page("GradeCalculatorForm", "CalculateFinalGrade")';
+<!-- Import Vue App -->
+<script src="js/main.js"></script>
 
-            fetch(url, {
-                method: 'POST',
-                body: formData,
-            })
-                .then(response => response.json())
-                .then((data) => {
-                    // Update the page dynamically with the response data
-                    const resultElement = form.querySelector('#result');
-                    resultElement.innerHTML = `<strong>Final Grade: ${data.finalGrade}</strong>`;
-                    var final_grade = data.finalGrade;
-                    GeneralWeightedAverage.push(final_grade);
-                                        
-                    console.log(data);
+<!-- Render the scripts asynchronously -->
+@section Scripts {
+    <script>
+        // Creating a Vue App instance
+        const mountedApp = app.mount('#app');
+        // Assigning values to Vue App instance's variables
+        mountedApp.setStudentName("@Model.studentInformationModel.StudentName");
+        mountedApp.setYearLevel("@Model.GetLevelName(Model.studentInformationModel.LevelID)");
+        mountedApp.setProgram("@Model.GetProgramName(Model.studentInformationModel.ProgramID)");
+        mountedApp.setTerm("@Model.GetTermName(Model.studentInformationModel.TermID)");
+        
+        // Assign a NodeList for every grade-form class items
+        const forms = document.querySelectorAll('.grade-form');
+        
+        forms.forEach(form => {
+            const inputPrelims = form.querySelector('input[name="inputPrelims"]');
+            const inputMidterms = form.querySelector('input[name="inputMidterms"]');
+            const inputPrefinals =form.querySelector('input[name="inputPrefinals"]');
+            const inputFinals = form.querySelector('input[name="inputFinals"]');
+            form.addEventListener('submit', (e) => {
+                // Prevents the default action of a POST method to refresh the page
+                e.preventDefault();
 
-                    var average = GeneralWeightedAverage.reduce((a, b) => a + b, 0) / GeneralWeightedAverage.length;
-                    average = Math.round(average * 100) / 100;
-                    const personalInformationElement = document.getElementById('personalInformation');
-                    const ul = personalInformationElement.querySelector('ul');
+                const formData = new FormData(form);
+                // Refers to the CalculateFinalGrade() method from the GradeCalculatorForm
+                const url = '@Url.Page("GradeCalculatorForm", "CalculateFinalGrade")';
 
-                    for (let i = 0; i < ul.children.length; i++) {
-                        switch (i) {
-                            case 0:
-                                ul.children[i].textContent = `Name: @Model.studentInformationModel.Name`;
-                                break;
-                            case 1:
-                                ul.children[i].textContent = `Level / Year: @Model.studentInformationModel.LevelName`;
-                                break;
-                            case 2:
-                                ul.children[i].textContent = `Program: @Model.studentInformationModel.ProgramName`;
-                                break;
-                            case 3:
-                                ul.children[i].textContent = `Term: @Model.studentInformationModel.TermName`;
-                                break;
-                            case 4:
-                                ul.children[i].textContent = `General Weighted Average: ${average}`;
-                            default:
-                        }
-                    }
+                fetch(url, {
+                    method: 'POST',
+                    body: formData,
                 })
-                .catch((error) => {
-                    console.error(error);
-                });
+                    .then(response => response.json())
+                    .then((data) => {
+                        // Update the page dynamically with the response data
+                        const resultElement = form.querySelector('#result');
+                        resultElement.innerHTML = `<strong>Final Grade: ${data.finalGrade}</strong>`;
+                        
+                        // Disable the text input elements
+                        inputPrelims.disabled = true;
+                        inputMidterms.disabled = true;
+                        inputPrefinals.disabled = true;
+                        inputFinals.disabled = true;
+                        
+                        // Retrieves the Final Grade from the back-end
+                        let final_grade = data.finalGrade;
+                        // Add the Final Grade to a grade list
+                        mountedApp.pushGrade(final_grade);
+                        
+                        // Compute the average from the grade list, which serves as the General Weighted Average
+                        let GWA = mountedApp.gradeList.reduce((a, b) => a + b, 0) / mountedApp.gradeList.length;
+                        
+                        // Round off the result
+                        GWA = Math.round(GWA * 100) / 100;
+                        
+                        // Update the GWA
+                        mountedApp.setGWA(GWA);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            });
         });
-    });
-</script>
+    </script>
+}
