@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.HttpOverrides;
+
 namespace GradeCalculator.Web;
 
 public class Program
@@ -9,7 +11,15 @@ public class Program
         // Add services to the container.
         builder.Services.AddRazorPages();
 
+        builder.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders =
+            ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+        });
+
         var app = builder.Build();
+
+        app.UseForwardedHeaders(new ForwardedHeadersOptions{ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto});
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
