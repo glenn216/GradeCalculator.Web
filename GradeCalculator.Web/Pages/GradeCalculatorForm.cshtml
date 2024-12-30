@@ -63,7 +63,7 @@
                                 </label>
                             </p>
                             <div class="mb-1">
-                                <table class="table">
+                                <table class="table" col-sm-5>
                                     <thead>
                                     <tr class="table-active">
                                         <th scope="col">Prelims</th>
@@ -75,24 +75,16 @@
                                     <tbody>
                                     <tr>
                                         <td>
-                                            <div class="col-md-7">
-                                                <input type="number" step=".01" class="form-control w-100" id="inputPrelims" name="inputPrelims">
-                                            </div>
+                                            <input type="number" step=".01" class="form-control col-3" id="inputPrelims" name="inputPrelims">
                                         </td>
                                         <td>
-                                            <div class="col-md-7">
-                                                <input type="number" step=".01" class="form-control w-100" id="inputMidterms" name="inputMidterms">
-                                            </div>
+                                            <input type="number" step=".01" class="form-control col-3" id="inputMidterms" name="inputMidterms">
                                         </td>
                                         <td>
-                                            <div class="col-md-7">
-                                                <input type="number" step=".01" class="form-control w-100" id="inputPrefinals" name="inputPrefinals">
-                                            </div>
+                                            <input type="number" step=".01" class="form-control col-3" id="inputPrefinals" name="inputPrefinals">
                                         </td>
                                         <td>
-                                            <div class=" col-md-7">
-                                                <input type="number" step=".01" class="form-control w-100" id="inputFinals" name="inputFinals">
-                                            </div>
+                                            <input type="number" step=".01" class="form-control col-3" id="inputFinals" name="inputFinals">
                                         </td>
                                     </tr>
                                     </tbody>
@@ -111,6 +103,7 @@
     </div>
 </div>
 
+
 <!-- Import Vue App -->
 <script src="js/main.js"></script>
 
@@ -120,6 +113,12 @@
         // Creating a Vue App instance
         const mountedApp = app.mount('#app');
         // Assigning values to Vue App instance's variables
+        @{
+            if(string.IsNullOrWhiteSpace(Model.studentInformationModel.StudentName) == true)
+            {
+                Model.studentInformationModel.StudentName = "Anonymous";
+            }
+        }
         mountedApp.setStudentName("@Model.studentInformationModel.StudentName");
         mountedApp.setYearLevel("@Model.GetLevelName(Model.studentInformationModel.LevelID)");
         mountedApp.setProgram("@Model.GetProgramName(Model.studentInformationModel.ProgramID)");
