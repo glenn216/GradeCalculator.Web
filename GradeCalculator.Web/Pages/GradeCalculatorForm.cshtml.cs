@@ -35,15 +35,18 @@ public class GradeCalculatorForm : PageModel
 {
     public StudentInformationModel studentInformationModel;
     public CourseModel courseModel = new CourseModel();
-    public void OnGet(String Serialize)
+    private DateTime currentDate = DateTime.Now;
+    public async void OnGet(String Serialize)
     {
         this.studentInformationModel = JsonSerializer.Deserialize<StudentInformationModel>(Serialize);
-
         //this.studentInformationModel = newStudentInformationModel;
+        Console.WriteLine("------ A user logged on ------");
         Console.WriteLine($"Name: {studentInformationModel.StudentName}");
         Console.WriteLine($"Year/Level: {GetLevelName(studentInformationModel.LevelID)}");
         Console.WriteLine($"Program: {GetProgramName(studentInformationModel.ProgramID)} ({GetProgramAbbrev(studentInformationModel.ProgramID)})");
         Console.WriteLine($"Term: {GetTermName(studentInformationModel.TermID)}");
+        Console.WriteLine($"Date accessed: {currentDate}");
+        Console.WriteLine("------------------------------");
         
         InitializeCourse(studentInformationModel.LevelID, studentInformationModel.ProgramID, studentInformationModel.TermID);
     }
@@ -57,10 +60,7 @@ public class GradeCalculatorForm : PageModel
 
         Double FINAL_GRADE = PRELIMS + MIDTERMS + PREFINALS + FINALS;
         FINAL_GRADE = Math.Round(FINAL_GRADE, 2);
-       
-        Console.WriteLine("--- " + formData["studentName"] + " ---");
-        Console.WriteLine("Course: " + formData["CourseName"]);
-        Console.WriteLine("Final Grade: " + FINAL_GRADE);
+
         return await Task.FromResult<IActionResult>(new JsonResult(new
         {
             finalGrade = gpScale(FINAL_GRADE)
@@ -76,11 +76,11 @@ public class GradeCalculatorForm : PageModel
             >= 91.50 and <= 94.49 => 1.50,
             >= 88.50 and <= 91.49 => 1.75,
             >= 85.50 and <= 88.49 => 2.00,
-            >= 82.50 and <= 85.49 => 2.25,
-            >= 79.50 and <= 82.49 => 2.50,
-            >= 76.50 and <= 79.49 => 2.75,
-            >= 74.50 and <= 76.49 => 3.00,
-            <= 74.49 => 5.00,
+            >= 81.50 and <= 85.49 => 2.25,
+            >= 77.50 and <= 81.49 => 2.50,
+            >= 73.50 and <= 77.49 => 2.75,
+            >= 69.50 and <= 73.49 => 3.00,
+            <= 69.49 => 5.00,
             _ => 0.00
         };
     }
